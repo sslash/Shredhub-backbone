@@ -1,0 +1,27 @@
+<div class="row-fluid">
+	<% _.each(shredders, function(shredder) { %>
+	<div class="row-fluid">
+		<div class="span4">
+			<a href=""> <img class="imageClipped newsItemImage"
+				src="resources/pics/profiles/<%= shredder.get('profileImagePath') %>" />
+			</a>
+		</div>
+		<div class="span8">
+			<p><a href="#shredder/<%= shredder.get('id') %>"><%= shredder.get('username') %></a></p>
+			<p><small>Guitars: 
+			<% _.each(shredder.get('guitars'), function(guitar, i) { %>
+				<% if ( i > 0 ) { %>,<% } %>
+				<%= guitar %>
+			<% }) %>
+			</small></p>
+			<p> <small> Equiptment:
+			<% _.each(shredder.get('equiptment'), function(eq, i) { %>
+				<% if ( i > 0 ) { %>,<% } %> 
+				<%= eq %>
+			<% }) %>
+			</small></p>
+		</div>
+	</div> 
+	</br> 
+	<% }) %>
+</div>

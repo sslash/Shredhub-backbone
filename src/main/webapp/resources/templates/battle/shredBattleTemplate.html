@@ -1,0 +1,52 @@
+<div class="row-unit">
+	<video class="video-js vjs-default-skin" controls preload="auto"
+		width=400px>
+		<source src="resources/vidz/<%=shred.videoPath %>"
+			type='video/mp4'>
+						
+				<source
+				src="resources/vidz/<%=shred.videoPath %>"
+				type='video/webm'>	
+	</video>
+</div>
+
+<!-- COMMENTS AND RATING -->
+<div class="row-fluid">
+		<p class="lead">Rating</p>
+		<p>Created at: <%= new Date(shred.timeCreated).toUTCString() %></p>
+		<p>Number of raters: <%= shred.rating.numberOfRaters %></p>
+		<p>Rating: <% if (shred.rating.currentRating > 0) { %> <%=
+			shred.rating.currentRating / shred.rating.numberOfRaters %> <% } else
+			{ %> <%= 0 %> <% } %></p>
+
+		<p>
+			Rate it: <input type="range" min="0" max="10" name="rating" value="5" id="<%= id %>rateVal">
+			<button class="rateButton btn btn-small btn-primary" id="<%= id %>Rating">\m/</button>
+		</p>
+	</div>
+ 
+
+	<div class="row-fluid">
+		</br>
+		<p class="lead">Comments</p>
+		<table class="table table-condensed">
+			<tr>
+				<th>Text</th>
+				<th>By</th>
+				<th>At</th>
+			</tr>
+
+			<% if ( shred.shredComments ) { %> 
+				<% _.each(shred.shredComments, function(comment) { %>
+					<tr>
+						<td><%= comment.text %></td>
+						<td><%= comment.commenterId %></td>
+						<td><%= new Date(comment.timeCreated).toUTCString() %></td>
+					</tr>
+				<% }); %>
+			<% } %>
+		</table>
+		
+		<input type="text" class = "commentText" id ="<%= id %>Comment" placeholder="Leave a comment"/>
+	</div>
+</div>

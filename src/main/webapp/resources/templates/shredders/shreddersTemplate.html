@@ -1,0 +1,38 @@
+<div class="container">
+	<div class="marketing">
+		<h1>Shredders</h1>
+		
+		<br>  
+		<input type="text" id="shredderSearch"
+			class="input-medium search-query" placeholder="Search for a shredder">
+		
+		<p class="text-error"></p>
+		<br>
+		<hr>  
+		<% _.each(shredders, function(s) { %>
+		<div class="row-fluid">
+			<div class="span2">
+				<img src="resources/pics/profiles/<%= s.get('profileImagePath') %>"
+					alt="Profile img" width="304">
+				<!--/span2-->
+			</div>
+			<div class="span10">
+				<a href="#shredder/<%= s.get('id') %>"><%= s.get('username') %></a>
+				<p class="lead"><%= s.get('description') %></p>
+				<p class="lead">Level: <%= s.get('level') %></p>
+
+				<!-- /span10 -->
+			</div>
+			<!-- /row-fluid -->
+		</div>
+		<hr>
+		<% }); %>
+		<!-- /marketing -->
+	</div>
+	<!-- /container -->
+</div>
+<hr>
+
+<footer>
+	<p>&copy; Shredhub 2012</p>
+</footer>

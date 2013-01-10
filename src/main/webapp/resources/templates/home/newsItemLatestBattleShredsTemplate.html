@@ -1,0 +1,16 @@
+<div class="row-fluid">
+	<% _.each(battles, function(battle) { %>
+	
+		<% if ( _.first(battle.get("battleRounds") ).battleesShred != null ) { %>
+			<p> <%= battle.get('battlee').username %> added a 
+			<a href="#battles/<%= battle.get('id') %>">shred </a>			
+		<% } else { %>
+			<p> <%= battle.get('battler').username %> added a 			
+		<% } %>
+		<a href="#battles/<%= battle.get('id') %>">shred </a> in a battle
+		<small> at <%= new Date(battle.get('lastBattleShred')).toUTCString() %></small> </p>
+		
+		<hr id="shred" class="soften">
+		
+	<% }) %>
+</div>

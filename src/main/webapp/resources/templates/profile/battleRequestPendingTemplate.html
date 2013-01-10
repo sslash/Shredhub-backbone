@@ -1,0 +1,9 @@
+<% if (model.get('battlee').id == user.id ) { %>
+	<h2><%= shredder.get("username") %> wants to battle you!</h2>
+	</br> 
+	<button id="checkBattleRequestButton" class="btn btn-info">Check it out</button> 
+<% } else if ( model.get('battler').id == user.id ) { %>
+	<h2>A battle request has been sent to <%= shredder.get("username") %>  </h2>
+<% } %>  
+
+<div id="battleRequestModalTemplate"></div>

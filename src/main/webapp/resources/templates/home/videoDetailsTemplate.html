@@ -1,0 +1,43 @@
+	<div class="row-fluid"> 
+			<div class="span6">
+				<p >
+					<small> Created at: <%= new Date(shred.get('timeCreated')).toUTCString() %> </small> 
+				</p>  
+				<p class="lead">Number of raters:  <%= shred.get('shredRating').numberOfRaters %></p> 
+				<p class="lead">Rating: 
+					<% if (shred.get('shredRating').currentRating > 0) { %>
+					<%= shred.get('shredRating').currentRating / shred.get('shredRating').numberOfRaters %> 
+					<% } else { %>
+					<%= 0 %> 
+					<% } %>				 
+				</p>	
+				
+				<p class="small">
+					Rate it: <input type="range" min="0" max="10" name="rating"
+						value="5">
+					<button id="rateButton" class="btn btn-small btn-primary">\m/</button>
+				</p>
+					<input id="commentText" type="text" name=text
+						placeholder="Leave a comment!">
+					<button id="commentButton" class="btn btn-small btn-primary">Submit</button>  
+			</div> 
+ 
+			<div class="span6">
+				<p class="lead">Comments</p>
+				<table class="table table-condensed">				
+					<tr>
+						<th>Text</th>
+						<th>By</th>
+						<th>At</th>
+					</tr>
+					
+				<%_.each(shred.get('shredComments'),function(comment, i){%>
+						<tr>
+							<td><%= comment.text %></td>
+							<td><%= comment.commenterId %></td>
+							<td><%= new Date(comment.timeCreated).toUTCString() %></td>
+						</tr>			
+					<%});%>  
+				</table>
+			</div>
+		</div>

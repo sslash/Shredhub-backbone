@@ -1,0 +1,18 @@
+<div class="row-fluid">
+	<div class="span1">
+		<a class="nextShred" href="#">&lsaquo;</a>
+	</div>
+	<% _.each( _.first(fanees, 5), function(fanee) { %>
+	<div class="span2">
+	<a href="#shredder/<%= fanee.id %>">
+		<img class="imageClipped"
+			src="resources/pics/profiles/<%= fanee.profileImagePath %>" />
+		</a>	   
+		<p><%= fanee.username %></p> 
+	</div>
+	<% }) %>
+
+	<div class="span1"> 
+		<a class="nextShred" href="#">&rsaquo;</a>
+	</div>
+</div> 

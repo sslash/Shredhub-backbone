@@ -1,0 +1,39 @@
+		<h2>Shreds with high rating</h2>
+		<br><br><br>
+		
+		<div class="row-fluid">
+			<!-- List of shreds -->
+			<div class="row">
+			
+				<div class="span1">
+				 	<a class="nextShred" href="#">&lsaquo;</a> 
+				</div>
+				
+				<%_.each(_.first(shreds, 2),function(shred, i){%>
+
+		<div class="span5">
+
+			<div class="row-fluid">
+			<div class="span6">
+			<a href="#shredPool" id="<%= i %>" class="newShredsFromFaneesAncor">
+			<img class="imageClipped"
+				src="resources/vidz/<%= shred.get('videoThumbnail') %>" /> 
+			</a>
+			</div>
+			
+			<div class="span6">
+				<p class="lead">Rating: <%= shred.get('shredRating').currentRating %> </p> 
+				<p>By: <%= shred.get('owner').username %> </p>				
+				<p>Name: <%= shred.get('description') %> </p>
+				<p>Created at: <%= new Date(shred.get('timeCreated')).toUTCString() %> </p>
+				
+			</div>
+			</div>
+		</div> 
+		<%});%>
+				<div class="span1"> 
+						<a class="nextShred" href="#">&rsaquo;</a>
+				</div>
+				<!--  row-fluid -->
+			</div>
+		</div>

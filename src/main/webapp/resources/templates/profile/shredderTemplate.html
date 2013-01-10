@@ -1,0 +1,108 @@
+<div class="container">
+	<div class="marketing">
+		<h1><%= shredder.get('username') %></h1>
+		<p class="marketing-byline"><%= shredder.get('description') %></p>
+
+		<div class="row-fluid">
+
+			<div class="span6">
+				<img alt="Profile image"
+					src="resources/pics/profiles/<%= shredder.get('profileImagePath') %>"
+					width="300px" class="img-rounded" />
+			</div>
+			<div class="span6">
+				<p>Level: <%= levelLabel %> </p>
+				<p>Experience points: <%= shredder.get('shredderLevel') %> </p>
+
+				<!-- FAN OR BECOME FAN -->
+				<button class="btn btn-success" id="becomeFanButton">Become a fan</button> 
+			</div> 
+		</div>
+
+		<hr class="soften">
+		<h2>Shred specs</h2>
+		</br>
+
+		<div class="row-fluid">
+			<div class="span3">
+				<p>Birthdate:</p>
+			</div>
+
+			<!--/span-->
+			<div class="span9">
+				<p><%= shredder.get('birthdate') %></p>
+			</div>
+			<!--/span-->
+		</div>
+
+		<div class="row-fluid">
+			<div class="span3">
+				<p>Country:</p>
+			</div>
+
+			<!--/span-->
+			<div class="span9">
+				<p><%= shredder.get('country') %></p>
+			</div>
+			<!--/span-->
+		</div>
+
+		<div class="row-fluid">
+			<div class="span3">
+				<p>Email:</p>
+			</div>
+
+			<!--/span-->
+			<div class="span9">
+				<p><%= shredder.get('email') %></p>
+			</div>
+			<!--/span-->
+		</div>
+		<div class="row-fluid">
+			<div class="span3">
+				<p>Guitar:</p>
+			</div>
+
+			<!--/span-->
+			<div class="span9">
+				<% _.each(shredder.get('guitars'), function(guitar) { %>
+				<p><%= guitar %></p>
+				<% }); %>
+			</div>
+		</div>
+		<!-- row fluid -->
+
+		<div class="row-fluid">
+			<div class="span3">
+				<p>Equiptment:</p>
+			</div>
+
+			<!--/span-->
+			<div class="span9">
+				<% _.each(shredder.get('equiptment'), function(equiptment) { %>
+				<p><%= equiptment %></p>
+				<% }); %>
+			</div>
+			<!-- row fluid -->
+		</div>
+
+
+		<hr class="soften">
+		<div id="battleRelationship"></div>
+		<hr class="soften">
+
+		<h2><%= shredder.get('username') %>'s fanees</h2>
+
+		<p>List fanees</p>
+		<div id="fanees"></div>
+		 
+		<hr class="soften"> 
+		<h2><%= shredder.get('username') %>'s shreds</h2>
+		<div id="shreds"></div>
+		<div id="newShredsModalBox"></div>
+	</div>
+</div>
+
+<footer>
+	<p>&copy; Mikey 2012</p>
+</footer>

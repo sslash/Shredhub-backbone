@@ -1,0 +1,26 @@
+<h2>Shreds from shredders you might know</h2>
+<br>
+<!-- List of shreds -->
+<div class="row-fluid">
+
+	<div class="span1">
+		<a class="nextShred" href="#">&lsaquo;</a>
+	</div>
+
+	<%_.each(_.first(shreds, 3), function(shred, i){%>
+
+	<div class="span3">
+
+		<a href="#shredPool" id="<%= i %>" class="newShredsFromFaneesAncor">
+			<img class="imageClipped"
+			src="resources/vidz/<%= shred.get('videoThumbnail') %>" />
+		</a>
+		<p class="lead"><%= shred.get('description') %></p>
+		<p class="small"><%= shred.get('owner').username %></p>
+	</div>
+	<%});%>
+	<div class="span2">
+		<a class="nextShred" href="#">&rsaquo;</a>
+	</div>
+	<!--  /row-fluid -->
+</div>

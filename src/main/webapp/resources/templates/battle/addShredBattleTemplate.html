@@ -1,0 +1,19 @@
+<h4>You're turn to shred</h4>
+
+<form enctype="multipart/form-data" id="addShredForm">
+
+	<div class="control-group">
+		<div class="controls">
+			<input name="file" type="file" />
+		</div>
+	</div>
+
+	<div class="control-group">
+		<div class="controls">
+			<input type="submit" value="Upload" class="bnt btn-primary"
+				id="uploadButton" />
+		</div>
+	</div>
+	
+	<input type="hidden" value="<%= nextUp %>" id="nextUp" name="nextUp" %>
+</form> 

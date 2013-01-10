@@ -1,0 +1,29 @@
+<div class="row-fluid">
+	<% _.each(battles, function(battle) { %>
+	<div class="row-fluid">
+		<div class="span5">
+			<img class="imageClipped newsItemImage"
+				src="resources/pics/profiles/<%= battle.get('battler').profileImagePath %>" />
+		</div>
+		<div class ="span2">  
+			<h3> <a href="#battles/<%= battle.get('id') %>"> VS </a> </h3>
+		</div>
+		<div class="span5">
+			 <img class="imageClipped newsItemImage"
+				src="resources/pics/profiles/<%= battle.get('battlee').profileImagePath %>" />
+		</div>		 
+	</div>
+	<div class="row-fluid">
+		<div class="span5">
+			<p><%= battle.get('battler').username %></p>
+		</div>
+		<div class ="span2">
+		
+		</div>
+		<div class="span5">
+			 <p><%= battle.get('battlee').username %></p>
+		</div>		 
+	</div>
+	</br>
+	<% }) %>
+</div>

@@ -1,0 +1,42 @@
+<div class="container">
+	<div class="marketing">
+		<h1>Battles</h1>
+		<hr>
+		<div id="yourBattlesButtonDiv">
+		<button class="btn btn-info" id="yourBattlesButton">You're battles</button> 
+		</div>
+		<% _.each( battles, function(battle) { %>
+
+		<div class="row-fluid">
+		
+			<div class="span4">
+				<div class="battleImage">
+					<img alt="battler"
+						src="resources/pics/profiles/<%= battle.get('battler').profileImagePath %>"
+						class="img-rounded" />
+					<h2>
+						<span><%= battle.get('battler').username %></span>
+					</h2>
+				</div>
+			</div>
+			
+			<div class="span4">
+				<a href="#battles/<%= battle.id %>" class="vsText">VS</p>
+			</div> 			
+			
+			<div class="span4">
+				<div class="battleImage">
+					<img alt="battler"
+						src="resources/pics/profiles/<%= battle.get('battlee').profileImagePath %>"
+						class="img-rounded" />
+					<h2>
+						<span><%= battle.get('battlee').username %></span>
+					</h2>
+				</div>
+			</div>
+		</div>
+
+		<% }); %>
+
+	</div>
+</div>

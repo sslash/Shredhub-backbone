@@ -1,0 +1,66 @@
+package com.mikey.shredhub.web.helpers;
+
+import java.io.File;
+import java.io.IOException;
+
+import org.apache.commons.io.FileUtils;
+import org.springframework.web.multipart.MultipartFile;
+
+public class LocalImageFileSaver extends FileSaver {
+	private String imgPathDeploy;
+	private final String imgPath = "/Users/michaekg/michaekg-MyMaster/Shredhub-backbone/src/main/webapp/resources/vidz/";
+	
+
+	public LocalImageFileSaver(String deployPath) {
+		imgPathDeploy = deployPath;
+	}
+	
+	@Override
+	// TODO: Add some logic here to make sure we get the right file type
+	protected void validateFileName(MultipartFile image) throws ImageUploadException {
+		//if (!image.getContentType().equals("image/jpeg")) {
+			//throw new ImageUploadException("Only JPG images accepted");
+		//}
+	}
+
+	@Override
+	protected boolean concreteSaveFile(MultipartFile file, String filename ) {
+	
+		try {
+			if (!file.isEmpty()) {
+				
+				writeFileToDisk(imgPath + filename, file);
+				writeFileToDisk(imgPathDeploy + filename, file);
+				return true;
+			}
+		} catch (ImageUploadException e) {
+			System.out.println(e.getMessage());
+		}
+		return false;
+	}
+	
+	
+	public static void writeFileToDisk(String filename, MultipartFile image)
+			throws ImageUploadException {
+		try {
+			File file = new File(filename);
+			FileUtils.writeByteArrayToFile(file, image.getBytes());
+		} catch (IOException e) {
+			System.out.println("Failed to save image: " + e.getMessage() );
+			throw new ImageUploadException("Unable to save image", e);
+		}
+	}
+	
+
+	@Override
+	protected boolean createAndSaveThumbnail(String filename) {
+		CreateThumbnail thumbnailCreator = new CreateThumbnail();
+		boolean res = thumbnailCreator.createThumbnail(imgPath + filename);
+		if (res)
+			return thumbnailCreator.createThumbnail(imgPathDeploy + filename);
+		else 
+			return false;
+	}
+
+
+}

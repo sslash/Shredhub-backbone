@@ -1,0 +1,81 @@
+<div class="container">
+	<div class="marketing">
+		<h1>Battle</h1>
+		<p class="marketing-byline">Style: <%= battle.get('battleStyle')
+			%></p>
+		<hr>
+		<div class="row-fluid">
+
+			<div class="span4">
+				<div class="battleImage">
+					<img alt="battler"
+						src="resources/pics/profiles/<%= battle.get('battler').profileImagePath %>"
+						class="img-rounded" />
+					<h2>
+						<span><%= battle.get('battler').username %> </span>
+					</h2>
+				</div>
+			</div>
+
+			<div class="span4">
+				<p class="vsText">VS</p>
+			</div>
+
+			<div class="span4">
+				<div class="battleImage">
+					<img alt="battler"
+						src="resources/pics/profiles/<%= battle.get('battlee').profileImagePath %>"
+						class="img-rounded" />
+					<h2>
+						<span><%= battle.get('battlee').username %></span>
+					</h2>
+				</div>
+			</div>
+		</div>
+		<hr>
+
+		<div class="row-fluid">
+			<p class="marketing-byline">Leader: <%= leader %></p>
+		</div>
+		<div class="row-fluid">
+
+			<div class="span6">
+				<p>
+					<%= battle.get('battler').username %>'s points: <strong><%= battlePoints.battlersPoints %></strong>
+				</p>
+			</div>
+			<div class="span6">
+				<p>
+					<%= battle.get('battlee').username %>'s points: <strong><%= battlePoints.battleesPoints %></strong>
+				</p>
+			</div>
+		</div>
+
+		<hr>
+
+
+		<!--  BATTLE SHREDS  -->
+		<div id="battleRoundTmpl"></div>
+
+		<!-- /marketing -->
+	</div>
+
+
+	<div class="row-fluid">
+		<div class="span1">
+			<a id="nextRound" class="nextShred" href="#">&lsaquo;</a>
+		</div>
+
+		<div class="span5">
+			<div id="battlerTmpl"></div>
+		</div>
+
+		<div class="span5">
+
+			<div id="battleeTmpl"></div>
+		</div>
+		<div class="span1">
+			<a id="prevRound" class="nextShred" href="#">&rsaquo;</a>
+		</div>
+	</div>
+</div>

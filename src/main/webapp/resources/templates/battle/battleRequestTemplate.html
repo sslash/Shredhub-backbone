@@ -1,0 +1,28 @@
+<div class="modal hide fade videoView" id="battleRequestModal" aria-hidden="true" tabindex="10" role="dialog"
+	aria-labelledby="myModalLabel">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal"
+			aria-hidden="true">x</button>
+		<h3 id="myModalLabel">Batle request</h3> 
+		<p id="loginError" class="text-error"></p>
+	</div>
+
+	<!-- FORM INPUT -->
+	<div class="modal-body">
+		<h4 class="lead"><%= shredder.get('username') %> says:</h4> 
+		<p> <%= model.get('battleStyle') %> </p>
+		
+		<video id="videoInModal" class="video-js vjs-default-skin" controls
+			preload="auto" width="640">
+			<source src="resources/vidz/<%=model.get('videoPath') %>"
+				type='video/mp4'>
+  			<source src="resources/vidz/<%=model.get('videoPath') %>"
+					type='video/webm'>		
+		</video>
+		
+		<p> Created at: <%= model.get('timeCreated') %> </p>
+		</div>
+		<div class="modal-footer">
+		<button id="acceptBattle" class="btn btn-success">Accept!</button>
+	</div>
+</div>
