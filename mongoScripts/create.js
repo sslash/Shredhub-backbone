@@ -28,6 +28,7 @@ for ( var i = 1; i <= 1000; i++) {
 	var r2 = Math.floor(Math.random() * 10);
 	var r3 = Math.floor(Math.random() * 10);
 	var r4 = Math.floor(Math.random() * 22);
+	var r5 = Math.floor(Math.random() * 100);
 
 	var sh = {
 		username : "Shredder" + i,
@@ -41,7 +42,7 @@ for ( var i = 1; i <= 1000; i++) {
 		equiptment : [ eq[r3] ],
 		description : "Simple test shredder #" + i,
 		timeCreated : new Date(),
-		shredderLevel : 0
+		shredderLevel : r5
 	};
 
 	db.shredder.save(sh);
@@ -78,39 +79,60 @@ var shr = [ "23shred1.mp4", "battle-23-8-5.mp4", "fgdf.mp4", "23shred2.mp4",
 		"crap.mp4", "sfsdf.mp4", "battle-23-12-5.mp4", "dfh.mp4", "sleep.mp4",
 		"battle-23-12-6.mp4", "dminor.mp4", "vid.mp4", "battle-23-8-1.mp4",
 		"edf.mp4", "ynsrv.mp4", "battle-23-8-3.mp4", "f.mp4" ];
-var tagsArr = ["Lick", "Fast", "Technique", "Sweeping", "Tapping", "Cover", "Solo",
-            "Instruction", "Sound test", "Mind blowing", "Passionate", "British",
-            "Punk", "Grip", "Chords", "Melody", "Scale", "Show-off", "Jazz", "Fusion",
-            "Rock", "Metal", "Pop", "Rap", "Funk", "Acoustic", "Chops", "Jam", "Improvisation"];
+var tagsArr = [ "Lick", "Fast", "Technique", "Sweeping", "Tapping", "Cover",
+		"Solo", "Instruction", "Sound test", "Mind blowing", "Passionate",
+		"British", "Punk", "Grip", "Chords", "Melody", "Scale", "Show-off",
+		"Jazz", "Fusion", "Rock", "Metal", "Pop", "Rap", "Funk", "Acoustic",
+		"Chops", "Jam", "Improvisation" ];
 // Create 10 000 shreds 
 for ( var i = 1; i <= 10000; i++) {
 
 	var ran = Math.floor(Math.random() * count);
+	var ranS = Math.floor(Math.random() * count);
 	var ran2 = Math.floor(Math.random() * 41);
 	var tagsRan = Math.floor(Math.random() * tagsArr.length);
 	var tagsRan2 = Math.floor(Math.random() * tagsArr.length);
+	var ranrate = Math.floor(Math.random() * 1000);
+	var ranrate2 = Math.floor(Math.random() * 10000);
 
 	var img = shr[ran2].split(".")[0].concat(".jpg");
 
 	db.shred.save({
 		description : "Simple test shred #" + i,
-		owner : { $ref : "shredder", $id :shredders[ran]._id}, // nice cause java can convert eagerly with dbrefs
+		owner : {
+			$ref : "shredder",
+			$id : shredders[ran]._id
+		}, // nice cause java can convert eagerly with dbrefs
 		timeCreated : new Date(),
 		shredType : "normal",
-		shredComments : new Array(),
+		shredComments : [ 
+		{
+			timeCreated : new Date(),
+			text : "Lorem ipsum lol cat mode" + i,
+			commenterId : shredders[ranS.id],
+			commenterName : shredders[ranS.username]
+		}, {
+			timeCreated : new Date(),
+			text : "Saps ipsumalis lol cat mode" + i+1,
+			commenterId : shredders[ranS.id],
+			commenterName : shredders[ranS.username]		
+		} ],
 		shredRating : {
-			numberOfRaters : 0,
-			currentRating : 0
+			numberOfRaters : ranrate,
+			currentRating : ranrate2
 		},
 		videoPath : shr[ran2],
 		videoThumbnail : img,
-		tags: [tagsArr[tagsRan], tagsArr[tagsRan2]]
+		tags : [ tagsArr[tagsRan], tagsArr[tagsRan2] ]
 	});
 }
 
 db.shred.save({
 	description : "Super duper shred",
-	owner : { $ref : "shredder", $id :shredders[0]._id },
+	owner : {
+		$ref : "shredder",
+		$id : shredders[0]._id
+	},
 	timeCreated : new Date(),
 	shredType : "normal",
 	shredComments : new Array(),
@@ -120,9 +142,8 @@ db.shred.save({
 	},
 	videoPath : shr[1],
 	videoThumbnail : img,
-	tags: [tagsArr[0], tagsArr[1]]
+	tags : [ tagsArr[0], tagsArr[1] ]
 });
-
 
 // Get shredders
 var shredders = db.shredder.find({});
@@ -133,7 +154,7 @@ for ( var i = 1; i <= 100000; i++) {
 	var ran1 = Math.floor(Math.random() * size);
 	var ran2 = Math.floor(Math.random() * size);
 	var ran3 = Math.floor(Math.random() * 41);
-	
+
 	var battleRound = {
 
 		battlersShred : {
@@ -150,8 +171,14 @@ for ( var i = 1; i <= 100000; i++) {
 	};
 
 	db.battle.save({
-		battler : { $ref : "shredder", $id :shredders[ran1]._id },
-		battlee : { $ref : "shredder", $id :shredders[ran2]._id },
+		battler : {
+			$ref : "shredder",
+			$id : shredders[ran1]._id
+		},
+		battlee : {
+			$ref : "shredder",
+			$id : shredders[ran2]._id
+		},
 		timeCreated : new Date(),
 		battleStyle : "Bet you can't shred this",
 		round : 1,
@@ -167,66 +194,56 @@ db.shreds.remove({
 	"owner" : DBRef("shredder", ObjectId("509fe13df4806a301d2f7527"))
 });
 
-
-// Create rating
-var shreds = db.shred.find({});
-
-for ( var i = 0; i < 1000; i++ ) {	
-	var raters = Math.floor(Math.random() * 10000);	
-	var shred = shreds[i];
-	var rating = {
-			numberOfRaters : raters,
-			currentRating : 0
-	};
-	for ( var y = 0; y < raters; y++ ){
-		var rate = Math.floor(Math.random() * 10);
-		rating.currentRating += rate;
-	}
-	
-	shred.shredRating = rating;
-	db.shred.save(shred);
-}
-
-
 // Create fanees
 
 var shredders = db.shredder.find();
 var size = db.shredder.count();
 
-for ( var i = 0; i < size; i++ ) {
+for ( var i = 0; i < size; i++) {
 	var shredder = shredders[i];
-	
+
 	// Max 10 fanees
 	var faneeNum = Math.floor(Math.random() * 10);
-	
-	for ( var y = 0; y < faneeNum; y++ ) {
-		var fanee = Math.floor(Math.random() * size);	
-		
+
+	for ( var y = 0; y < faneeNum; y++) {
+		var fanee = Math.floor(Math.random() * size);
+
 		shredder.fanees.push(shredders[fanee]._id.str);
 	}
-	
+
 	db.shredder.save(shredder);
-} 
+}
 
 // Find slashss fanees
-db.shredders.find({"_id" : { $in : [ObjectId("50b21f88e14c513bfa72ffd6"), ObjectId("50b21f88e14c513bfa72fe81"), ObjectId("50b21f88e14c513bfa72ffb4"), ObjectId("50b21f88e14c513bfa730058"),ObjectId("50b21f88e14c513bfa72fe91"),ObjectId("50b21f88e14c513bfa72ff47")] } }).pretty();
+db.shredders.find(
+		{
+			"_id" : {
+				$in : [ ObjectId("50b21f88e14c513bfa72ffd6"),
+						ObjectId("50b21f88e14c513bfa72fe81"),
+						ObjectId("50b21f88e14c513bfa72ffb4"),
+						ObjectId("50b21f88e14c513bfa730058"),
+						ObjectId("50b21f88e14c513bfa72fe91"),
+						ObjectId("50b21f88e14c513bfa72ff47") ]
+			}
+		}).pretty();
 
 // shredders and shreds for testing
 db.shredders.save({
-		username : "Mike",
-		_id : ObjectId("50b24c7f724ad1b88627d3df"),
-		fanees : [ObjectId("50b24a2d724ad1b88627d3dc"), ObjectId("50b24e72724ad1b88627d3e5")],
-		birthdate : new Date(),
-		country : "USA",
-		profileImagePath : "slash.jpg",
-		email : "mike@slash.com",
-		password : "1234",
-		guitars : [ "Gibson les paul" ],
-		equiptment : [ "Marshall" ],
-		description : "Shreds like a beast",
-		timeCreated : new Date(),
-		shredderLevel : 0,
-	});
+	username : "Mike",
+	_id : ObjectId("50b24c7f724ad1b88627d3df"),
+	fanees : [ ObjectId("50b24a2d724ad1b88627d3dc"),
+			ObjectId("50b24e72724ad1b88627d3e5") ],
+	birthdate : new Date(),
+	country : "USA",
+	profileImagePath : "slash.jpg",
+	email : "mike@slash.com",
+	password : "1234",
+	guitars : [ "Gibson les paul" ],
+	equiptment : [ "Marshall" ],
+	description : "Shreds like a beast",
+	timeCreated : new Date(),
+	shredderLevel : 0,
+});
 
 db.shredders.save({
 	username : "Michael",
@@ -263,7 +280,7 @@ db.shredders.save({
 db.shredders.save({
 	_id : ObjectId("50b24a2e724ad1b88627d3dd"),
 	username : "Thor",
-	fanees : [ObjectId("50b24c7f724ad1b88627d3df")],
+	fanees : [ ObjectId("50b24c7f724ad1b88627d3df") ],
 	birthdate : new Date(),
 	country : "USA",
 	profileImagePath : "slash.jpg",
@@ -277,16 +294,22 @@ db.shredders.save({
 });
 
 //thor -> mike -> michael
-var thor = db.shredders.find({username: "Thor"});
-var mike = db.shredders.find({username: "Mike"});
-var michael = db.shredders.find({username: "Michael"});
-
-
-
+var thor = db.shredders.find({
+	username : "Thor"
+});
+var mike = db.shredders.find({
+	username : "Mike"
+});
+var michael = db.shredders.find({
+	username : "Michael"
+});
 
 db.shreds.save({
 	description : "Mike shred",
-	owner : { $ref : "shredders", $id : ObjectId("50b24c7f724ad1b88627d3df")},
+	owner : {
+		$ref : "shredders",
+		$id : ObjectId("50b24c7f724ad1b88627d3df")
+	},
 	timeCreated : new Date(),
 	shredType : "normal",
 	shredComments : new Array(),
@@ -296,13 +319,15 @@ db.shreds.save({
 	},
 	videoPath : "",
 	videoThumbnail : "",
-	tags: ["lol"]
+	tags : [ "lol" ]
 });
-
 
 db.shreds.save({
 	description : "Thor shred",
-	owner : { $ref : "shredders", $id : ObjectId("50b24a2e724ad1b88627d3dd")},
+	owner : {
+		$ref : "shredders",
+		$id : ObjectId("50b24a2e724ad1b88627d3dd")
+	},
 	timeCreated : new Date(),
 	shredType : "normal",
 	shredComments : new Array(),
@@ -312,12 +337,15 @@ db.shreds.save({
 	},
 	videoPath : "",
 	videoThumbnail : "",
-	tags: ["lol"]
+	tags : [ "lol" ]
 });
 
 db.shreds.save({
 	description : "Michael shred",
-	owner : { $ref : "shredders", $id : ObjectId("50b24a2d724ad1b88627d3dc")},
+	owner : {
+		$ref : "shredders",
+		$id : ObjectId("50b24a2d724ad1b88627d3dc")
+	},
 	timeCreated : new Date(),
 	shredType : "normal",
 	shredComments : new Array(),
@@ -327,12 +355,15 @@ db.shreds.save({
 	},
 	videoPath : "",
 	videoThumbnail : "",
-	tags: ["lol"]
+	tags : [ "lol" ]
 });
 
 db.shreds.save({
 	description : "Michael shred 2",
-	owner : { $ref : "shredders", $id : ObjectId("50b24a2d724ad1b88627d3dc")},
+	owner : {
+		$ref : "shredders",
+		$id : ObjectId("50b24a2d724ad1b88627d3dc")
+	},
 	timeCreated : new Date(),
 	shredType : "normal",
 	shredComments : new Array(),
@@ -342,11 +373,14 @@ db.shreds.save({
 	},
 	videoPath : "",
 	videoThumbnail : "",
-	tags: ["lol"]
+	tags : [ "lol" ]
 });
 db.shreds.save({
 	description : "Michael shred 3",
-	owner : { $ref : "shredders", $id : ObjectId("50b24a2d724ad1b88627d3dc")},
+	owner : {
+		$ref : "shredders",
+		$id : ObjectId("50b24a2d724ad1b88627d3dc")
+	},
 	timeCreated : new Date(),
 	shredType : "normal",
 	shredComments : new Array(),
@@ -356,12 +390,15 @@ db.shreds.save({
 	},
 	videoPath : "",
 	videoThumbnail : "",
-	tags: ["lol"]
+	tags : [ "lol" ]
 });
 
 db.shreds.save({
 	description : "Steves shred",
-	owner : { $ref : "shredders", $id : ObjectId("50b24e72724ad1b88627d3e5")},
+	owner : {
+		$ref : "shredders",
+		$id : ObjectId("50b24e72724ad1b88627d3e5")
+	},
 	timeCreated : new Date(),
 	shredType : "normal",
 	shredComments : new Array(),
@@ -371,13 +408,15 @@ db.shreds.save({
 	},
 	videoPath : "",
 	videoThumbnail : "",
-	tags: ["lol"]
+	tags : [ "lol" ]
 });
-
 
 db.shreds.save({
 	description : "Steves shred 2",
-	owner : { $ref : "shredders", $id : ObjectId("50b24e72724ad1b88627d3e5")},
+	owner : {
+		$ref : "shredders",
+		$id : ObjectId("50b24e72724ad1b88627d3e5")
+	},
 	timeCreated : new Date(),
 	shredType : "normal",
 	shredComments : new Array(),
@@ -387,8 +426,5 @@ db.shreds.save({
 	},
 	videoPath : "",
 	videoThumbnail : "",
-	tags: ["lol"]
+	tags : [ "lol" ]
 });
-
-
-

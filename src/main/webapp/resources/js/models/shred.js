@@ -13,8 +13,7 @@ define([ 'jquery', 'underscore', 'backbone', 'models/shredder'], function($, _, 
 			owner: {},
 			timeCreated: new Date(),
 			tags: new Array(),
-			shredType:"normal",
-			shredderLevel: 0
+			shredType:"normal"
 		},
 
 		initialize : function() {
@@ -26,9 +25,6 @@ define([ 'jquery', 'underscore', 'backbone', 'models/shredder'], function($, _, 
 			}
 		},
 
-		// Todo: Add validation..
-		validate : function(attributes) {
-		},
 
 		addRating : function(rateValue) {	
 			var shredRating = this.get('shredRating');
@@ -44,11 +40,19 @@ define([ 'jquery', 'underscore', 'backbone', 'models/shredder'], function($, _, 
 			var shredder = new Shredder(shredder);			
 			shredder.save();
 		},
+		
+		deleteComment : function(index) {
+			var comments = this.get('shredComments');
+			var intIndex = parseInt(index);
+			comments.splice(intIndex, 1);			
+			this.save('shredComments', comments);
+		},
 
-		addComment : function(commentText) {
+		addComment : function(commentText, commenter) {
 			var shredComment = {
 				text : commentText,
-				commenterId : "509971403ac1d6b8e31874f7",
+				commenterId : commenter.id,
+				commenterName : commenter.username,
 				timeCreated : new Date()
 			};
 			var url = "shreds/" + this.get('id') + "/comments/";

@@ -41,14 +41,10 @@ public class Shred {
 		return tags;
 	}
 
-
-
 	public void setTags(List<String> tags) {
 		this.tags = tags;
 	}
-
-
-
+	
 	public void setShredType(String shredType) {
 		this.shredType = shredType;
 	}

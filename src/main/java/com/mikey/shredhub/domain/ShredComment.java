@@ -16,6 +16,8 @@ public class ShredComment {
 	private String text;
 	
 	private String commenterId; 
+	
+	private String commenterName;
 
 	public String getText() {
 		return text;
@@ -41,15 +43,14 @@ public class ShredComment {
 		this.timeCreated = timeCreated;
 	}
 
-	/*
-	public String getId() {
-		return id;
+
+	public String getCommenterName() {
+		return commenterName;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setCommenterName(String commenterName) {
+		this.commenterName = commenterName;
 	}
-	*/
 
 	@Override
 	public String toString() {

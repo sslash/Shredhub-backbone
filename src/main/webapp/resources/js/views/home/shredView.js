@@ -3,9 +3,10 @@ define([ 'jquery',
          'backbone',
          'bootstrapModal',
          'video',
+         'session',
          'text!templates/home/videoView.html',
          'text!templates/home/videoDetailsTemplate.html'], 
-		function($, _, Backbone, BootstrapModal, Video,VideoViewTemplate,
+		function($, _, Backbone, BootstrapModal, Video, Session, VideoViewTemplate,
 				VideoDetailsTemplate) {
 
 	var ShredView = Backbone.View.extend({
@@ -13,7 +14,6 @@ define([ 'jquery',
 		// modalHidden: true, 
 		// model : Shred 
 		videoDetailsTmpl: ".videoDetailsTmpl",
-
 		initialize : function() {
 		 	this.model.on('change', this.renderTemplate, this);		 	
 		}, 
@@ -41,6 +41,12 @@ define([ 'jquery',
 		events: {
 			"click #commentButton" : "saveComment",
 			"click #rateButton" : "rateShred",
+			"click td .close" : "deleteComment",
+		},
+		
+		deleteComment : function(event) {
+			var commentIndex = event.currentTarget.id.split("-")[1];
+			this.model.deleteComment(commentIndex);
 		},
 
 		rateShred : function(event) {
@@ -51,8 +57,7 @@ define([ 'jquery',
 		
 		saveComment : function(event) {
 			event.preventDefault();
-			console.log("saving comment");
-			this.model.addComment($('#commentText').val());
+			this.model.addComment($('#commentText').val(), Session.getUser());
 		}
 	});
  

@@ -34,8 +34,9 @@
 				<%_.each(shred.get('shredComments'),function(comment, i){%>
 						<tr>
 							<td><%= comment.text %></td>
-							<td><%= comment.commenterId %></td>
+							<td><a href="#shredder/<%= comment.commenterId %>"><%= comment.commenterName %></a></td>
 							<td><%= new Date(comment.timeCreated).toUTCString() %></td>
+							<td><button type="button" class="close" id="del-<%= i %>" >x</button></td>
 						</tr>			
 					<%});%>  
 				</table>
