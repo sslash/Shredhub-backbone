@@ -6,10 +6,18 @@ define([ 'jquery', 'underscore', 'backbone', 'bootstrapModal', 'video',
 	var ShredsView = Backbone.View.extend({
 
 		page : 1,
+		
+		currVidSetIndex : 5,
+	
+		vidSetSize : 4,
+		
+		advancePage : 1,
+		
 
 		initialize : function() {
 			_.bindAll(this);
 			this.collection = new shredCollection();
+			console.log("init shreds view" + this.cid);
 		},
 
 		// Receives a template, so this class can be reused with different views (templates)
@@ -22,6 +30,31 @@ define([ 'jquery', 'underscore', 'backbone', 'bootstrapModal', 'video',
 
 			this.shredsTemplate = shredsTemplate;
 		},
+		
+		nextShreds : function(event) {
+			event.preventDefault();
+		
+			if (this.currVidSetIndex == this.advancePage){
+				this.collection.advancePage();
+				this.currVidSetIndex = 5;
+				var that = this;
+				this.collection.fetch({
+					success : function(res) {
+						that.renderCollection();
+					}
+				});
+			} else {
+				this.currVidSetIndex --;
+				this.renderCollection();
+			}	
+		},
+		
+		renderCollection : function() {
+			var template = _.template(this.shredsTemplate, {
+				shreds : _.last(this.collection.models, this.currVidSetIndex*this.vidSetSize)
+			});
+			$(this.el).html(template);		
+		},
 
 		render : function() {
 			this.populateShreds();
@@ -30,20 +63,17 @@ define([ 'jquery', 'underscore', 'backbone', 'bootstrapModal', 'video',
 
 		populateShreds : function() {
 			var that = this;
-
 			this.collection.fetch({
 				success : function(res) {
-					var template = _.template(that.shredsTemplate, {
-						shreds : res.models
-					});
-					$(that.el).html(template);
+					that.renderCollection();
 				}
 			});
 		},
 
 		events : {			
 		 	"click .newShredsFromFaneesAncor" : "showVideoView",
-		 	"keypress #tagSearch" : "populateShredsWithTags"
+		 	"keypress #tagSearch" : "populateShredsWithTags",
+		 	"click .nextShred" : "nextShreds"
 		},  
 		
 		populateShredsWithTags : function(event) {

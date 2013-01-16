@@ -84,7 +84,7 @@ var tagsArr = [ "Lick", "Fast", "Technique", "Sweeping", "Tapping", "Cover",
 		"British", "Punk", "Grip", "Chords", "Melody", "Scale", "Show-off",
 		"Jazz", "Fusion", "Rock", "Metal", "Pop", "Rap", "Funk", "Acoustic",
 		"Chops", "Jam", "Improvisation" ];
-// Create 10 000 shreds 
+// Create 100 000 shreds 
 for ( var i = 1; i <= 10000; i++) {
 
 	var ran = Math.floor(Math.random() * count);
@@ -150,7 +150,7 @@ var shredders = db.shredder.find({});
 var size = db.shredder.count();
 
 // Create battles
-for ( var i = 1; i <= 100000; i++) {
+for ( var i = 1; i <= 10000; i++) {
 	var ran1 = Math.floor(Math.random() * size);
 	var ran2 = Math.floor(Math.random() * size);
 	var ran3 = Math.floor(Math.random() * 41);
@@ -187,6 +187,29 @@ for ( var i = 1; i <= 100000; i++) {
 	});
 }
 
+//Create battle requests
+for ( var i = 1; i <= 10000; i++) {
+	var ran1 = Math.floor(Math.random() * size);
+	var ran2 = Math.floor(Math.random() * size);
+	var ran3 = Math.floor(Math.random() * 41);
+
+	db.battleRequest.save({
+		battler : {
+			$ref : "shredder",
+			$id : shredders[ran1]._id
+		},
+		battlee : {
+			$ref : "shredder",
+			$id : shredders[ran2]._id
+		},
+		timeCreated : new Date(),
+		battleStyle : "Bet you can't shred this",
+		videoPath : "battle-23-8-5.mp4",
+		videoThumbnail : "battle_50a508930364e84086ef7b7c_battle2.jpg",
+	});
+}
+
+
 // QUERYING 
 
 // remove shreds by slash
@@ -213,218 +236,3 @@ for ( var i = 0; i < size; i++) {
 
 	db.shredder.save(shredder);
 }
-
-// Find slashss fanees
-db.shredders.find(
-		{
-			"_id" : {
-				$in : [ ObjectId("50b21f88e14c513bfa72ffd6"),
-						ObjectId("50b21f88e14c513bfa72fe81"),
-						ObjectId("50b21f88e14c513bfa72ffb4"),
-						ObjectId("50b21f88e14c513bfa730058"),
-						ObjectId("50b21f88e14c513bfa72fe91"),
-						ObjectId("50b21f88e14c513bfa72ff47") ]
-			}
-		}).pretty();
-
-// shredders and shreds for testing
-db.shredders.save({
-	username : "Mike",
-	_id : ObjectId("50b24c7f724ad1b88627d3df"),
-	fanees : [ ObjectId("50b24a2d724ad1b88627d3dc"),
-			ObjectId("50b24e72724ad1b88627d3e5") ],
-	birthdate : new Date(),
-	country : "USA",
-	profileImagePath : "slash.jpg",
-	email : "mike@slash.com",
-	password : "1234",
-	guitars : [ "Gibson les paul" ],
-	equiptment : [ "Marshall" ],
-	description : "Shreds like a beast",
-	timeCreated : new Date(),
-	shredderLevel : 0,
-});
-
-db.shredders.save({
-	username : "Michael",
-	_id : ObjectId("50b24a2d724ad1b88627d3dc"),
-	fanees : new Array(),
-	birthdate : new Date(),
-	country : "USA",
-	profileImagePath : "slash.jpg",
-	email : "michael@slash.com",
-	password : "1234",
-	guitars : [ "Gibson les paul" ],
-	equiptment : [ "Marshall" ],
-	description : "Shreds like a beast",
-	timeCreated : new Date(),
-	shredderLevel : 0,
-});
-
-db.shredders.save({
-	_id : ObjectId("50b24e72724ad1b88627d3e5"),
-	username : "Steve",
-	fanees : new Array(),
-	birthdate : new Date(),
-	country : "USA",
-	profileImagePath : "slash.jpg",
-	email : "steve@slash.com",
-	password : "1234",
-	guitars : [ "Gibson les paul" ],
-	equiptment : [ "Marshall" ],
-	description : "Shreds like a beast",
-	timeCreated : new Date(),
-	shredderLevel : 0,
-});
-
-db.shredders.save({
-	_id : ObjectId("50b24a2e724ad1b88627d3dd"),
-	username : "Thor",
-	fanees : [ ObjectId("50b24c7f724ad1b88627d3df") ],
-	birthdate : new Date(),
-	country : "USA",
-	profileImagePath : "slash.jpg",
-	email : "thor@slash.com",
-	password : "1234",
-	guitars : [ "Gibson les paul" ],
-	equiptment : [ "Marshall" ],
-	description : "Shreds like a beast",
-	timeCreated : new Date(),
-	shredderLevel : 0,
-});
-
-//thor -> mike -> michael
-var thor = db.shredders.find({
-	username : "Thor"
-});
-var mike = db.shredders.find({
-	username : "Mike"
-});
-var michael = db.shredders.find({
-	username : "Michael"
-});
-
-db.shreds.save({
-	description : "Mike shred",
-	owner : {
-		$ref : "shredders",
-		$id : ObjectId("50b24c7f724ad1b88627d3df")
-	},
-	timeCreated : new Date(),
-	shredType : "normal",
-	shredComments : new Array(),
-	shredRating : {
-		numberOfRaters : 0,
-		currentRating : 0
-	},
-	videoPath : "",
-	videoThumbnail : "",
-	tags : [ "lol" ]
-});
-
-db.shreds.save({
-	description : "Thor shred",
-	owner : {
-		$ref : "shredders",
-		$id : ObjectId("50b24a2e724ad1b88627d3dd")
-	},
-	timeCreated : new Date(),
-	shredType : "normal",
-	shredComments : new Array(),
-	shredRating : {
-		numberOfRaters : 0,
-		currentRating : 0
-	},
-	videoPath : "",
-	videoThumbnail : "",
-	tags : [ "lol" ]
-});
-
-db.shreds.save({
-	description : "Michael shred",
-	owner : {
-		$ref : "shredders",
-		$id : ObjectId("50b24a2d724ad1b88627d3dc")
-	},
-	timeCreated : new Date(),
-	shredType : "normal",
-	shredComments : new Array(),
-	shredRating : {
-		numberOfRaters : 0,
-		currentRating : 0
-	},
-	videoPath : "",
-	videoThumbnail : "",
-	tags : [ "lol" ]
-});
-
-db.shreds.save({
-	description : "Michael shred 2",
-	owner : {
-		$ref : "shredders",
-		$id : ObjectId("50b24a2d724ad1b88627d3dc")
-	},
-	timeCreated : new Date(),
-	shredType : "normal",
-	shredComments : new Array(),
-	shredRating : {
-		numberOfRaters : 0,
-		currentRating : 0
-	},
-	videoPath : "",
-	videoThumbnail : "",
-	tags : [ "lol" ]
-});
-db.shreds.save({
-	description : "Michael shred 3",
-	owner : {
-		$ref : "shredders",
-		$id : ObjectId("50b24a2d724ad1b88627d3dc")
-	},
-	timeCreated : new Date(),
-	shredType : "normal",
-	shredComments : new Array(),
-	shredRating : {
-		numberOfRaters : 0,
-		currentRating : 0
-	},
-	videoPath : "",
-	videoThumbnail : "",
-	tags : [ "lol" ]
-});
-
-db.shreds.save({
-	description : "Steves shred",
-	owner : {
-		$ref : "shredders",
-		$id : ObjectId("50b24e72724ad1b88627d3e5")
-	},
-	timeCreated : new Date(),
-	shredType : "normal",
-	shredComments : new Array(),
-	shredRating : {
-		numberOfRaters : 0,
-		currentRating : 0
-	},
-	videoPath : "",
-	videoThumbnail : "",
-	tags : [ "lol" ]
-});
-
-db.shreds.save({
-	description : "Steves shred 2",
-	owner : {
-		$ref : "shredders",
-		$id : ObjectId("50b24e72724ad1b88627d3e5")
-	},
-	timeCreated : new Date(),
-	shredType : "normal",
-	shredComments : new Array(),
-	shredRating : {
-		numberOfRaters : 0,
-		currentRating : 0
-	},
-	videoPath : "",
-	videoThumbnail : "",
-	tags : [ "lol" ]
-});

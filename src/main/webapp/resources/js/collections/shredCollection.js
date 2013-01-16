@@ -22,6 +22,10 @@ define([
     	if ( attr['id'] ) this.id = attr['id'];
     },
     
+    advancePage : function(){
+    	this.page ++;
+    },
+    
     setQuery : function(q) {
     	this.query = q;
     },

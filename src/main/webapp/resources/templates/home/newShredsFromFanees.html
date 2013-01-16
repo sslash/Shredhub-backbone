@@ -1,12 +1,12 @@
-
 <h2>New shreds from fanees</h2>
 <div class="row-fluid">
 	<!-- List of shreds -->
 	<div class="row">
 		<div class="span2">
-			<a class="nextShred" href="#">&lsaquo;</a>
+			<a class="nextShred" id = "prevNewFromFanees" href="#">&lsaquo;</a>
 		</div>
 
+	
 		<%_.each(_.first(shreds, 4),function(shred, i){%>
 
 		<div class="span2">
@@ -23,7 +23,7 @@
 		<%});%>
 
 		<div class="span2">
-			<a class="nextShred" href="#">&rsaquo;</a>
+			<a class="nextShred" id ="nextNewFromFanees" href="#">&rsaquo;</a>
 		</div>
 		<!--  row-fluid -->
 	</div>
