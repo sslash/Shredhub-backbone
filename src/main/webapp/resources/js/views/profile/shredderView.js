@@ -67,8 +67,12 @@ define([ 'jquery', 'underscore', 'backbone', 'session',
 			// Here, I fetch all the fanees from the server.
 			// The server could do the job for me when I got the 
 			// shredder, but this goes against the thick client model
-			var faneesList = this.model.get('fanees');
-			this.fetchFanees(faneesList);			
+			if ( this.options.fanees ) {
+				this.renderFanees(this.options.fanees);
+			} else {
+				var faneesList = this.model.get('fanees');
+				this.fetchFanees(faneesList);
+			}
 		},
 
 		fetchFanees : function(shredders) {
@@ -81,12 +85,16 @@ define([ 'jquery', 'underscore', 'backbone', 'session',
 			$.get("shredders/?action=listOfShredders",
 				shredderIds,
 				function(res) {
-					var compiledTmpl = _.template(FaneesTemplate, {
-						"fanees" : res
-					});
-					$(that.faneesDiv).html(compiledTmpl);
+					that.renderFanees(res);					
 				}				
 			);
+		},
+		
+		renderFanees : function(fanees) {
+			var compiledTmpl = _.template(FaneesTemplate, {
+				"fanees" : fanees
+			});
+			$(this.faneesDiv).html(compiledTmpl);
 		},
 
 		populateShreds : function() {
@@ -140,7 +148,7 @@ define([ 'jquery', 'underscore', 'backbone', 'session',
 					el : "#newShredsModalBox",
 					model : shred
 				});
-				shredView.setTemplate(shredTemplate);
+				//shredView.setTemplate(shredTemplate); 
 				shredView.render();
 			}))();
 		}

@@ -6,7 +6,7 @@
 			<div class="row">
 			
 				<div class="span1">
-				 	<a class="nextShred" href="#">&lsaquo;</a> 
+				 	<a class="nextShred" id = "prevNewFromFanees" href="#">&lsaquo;</a>
 				</div>
 				
 				<%_.each(_.first(shreds, 2),function(shred, i){%>
@@ -15,7 +15,7 @@
 
 			<div class="row-fluid">
 			<div class="span6">
-			<a href="#shredPool" id="<%= i %>" class="newShredsFromFaneesAncor">
+			<a href="#shredPool" id="topShreds_<%= (i + index) %>" class="newShredsFromFaneesAncor">
 			<img class="imageClipped"
 				src="resources/vidz/<%= shred.get('videoThumbnail') %>" /> 
 			</a>
@@ -24,7 +24,7 @@
 			<div class="span6">
 				<p class="lead">Rating: <%= shred.get('shredRating').currentRating %> </p> 
 				<p>By: <%= shred.get('owner').username %> </p>				
-				<p>Name: <%= shred.get('description') %> </p>
+				<p>Name: <%= shred.get('description') %> </p> 
 				<p>Created at: <%= new Date(shred.get('timeCreated')).toUTCString() %> </p>
 				
 			</div>
@@ -32,7 +32,7 @@
 		</div> 
 		<%});%>
 				<div class="span1"> 
-						<a class="nextShred" href="#">&rsaquo;</a>
+					<a class="nextShred" id = "prevNewFromFanees" href="#">&rsaquo;</a>
 				</div>
 				<!--  row-fluid -->
 			</div>

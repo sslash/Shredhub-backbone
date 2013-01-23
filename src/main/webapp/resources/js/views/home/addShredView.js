@@ -36,15 +36,16 @@ define([ 'jquery', 'underscore', 'backbone', 'bootstrapModal', 'session',
 			var shredder = Session.getUser();
 			var that = this;
 			console.log("WILL POST!");
-			var video = new FormData( $('#addShredForm')[0] );
-			this.postVideo(video);
+			//var video = new FormData( $('#addShredForm')[0] );
+			//this.postVideo(video);
 			
 			
 			
-			//var tags = $('#inputTags').val();
-			//var tagsArr = tags.split(/,\s*/g);
-			//var video = new FormData( $('#addShredForm')[0] ); 
-/*
+			var tags = $('#inputTags').val();
+			var tagsArr = tags.split(/,\s*/g);
+			var video = new FormData( $('#addShredForm')[0] ); 
+
+			// save the shed
 			this.model.save({
 				description : $('#inputDescription').val(),
 				owner : shredder,
@@ -60,9 +61,10 @@ define([ 'jquery', 'underscore', 'backbone', 'bootstrapModal', 'session',
 				shredType : 'normal'
 			}, {
 				success : function() {
+					console.log("Save shred success. will save video");
 					that.postVideo(video);
 				} 
-			});*/
+			});
 		},
 
 		postForm : function(event) {
@@ -72,7 +74,7 @@ define([ 'jquery', 'underscore', 'backbone', 'bootstrapModal', 'session',
 
 		postVideo : function(video) {
 			var that = this;
-			$.ajax({
+	/*		$.ajax({
 				url : '/thumbnailCreator/create',
 				type : 'POST',
 				// Form data
@@ -133,10 +135,10 @@ define([ 'jquery', 'underscore', 'backbone', 'bootstrapModal', 'session',
 				cache : false,
 				contentType : false,
 				processData : false
-			});
+			});*/
 			
 
-			/*$.ajax({
+			$.ajax({
 				url : 'shreds/' + this.model.id, //server script to process data
 				type : 'POST',
 				// Form data
@@ -164,7 +166,7 @@ define([ 'jquery', 'underscore', 'backbone', 'bootstrapModal', 'session',
 				cache : false,
 				contentType : false,
 				processData : false
-			});*/
+			});
 		},
 		onProgress : function() {
 

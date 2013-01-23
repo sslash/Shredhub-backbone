@@ -39,7 +39,7 @@ public class MongoTest {
 
 		List <String> fanees =  mongoTemplate.findOne(
 				new Query(Criteria.where("_id").is(shredder)), Shredder.class,
-				"shredders").getFanees();
+				"shredder").getFanees();
 		List <ObjectId> toRet = new ArrayList <ObjectId>();
 		for ( String s : fanees ) {
 			toRet.add(new ObjectId(s));
@@ -49,17 +49,46 @@ public class MongoTest {
 	
 	@Test
 	public void testSap() {	
-		Criteria crit = 
-				new Criteria().orOperator(
-						Criteria.where("battlee.$id").is(new ObjectId("50b613515b5d9368d1c01faa")),
-						Criteria.where("battler.$id").is(new ObjectId("50b613515b5d9368d1c01faa")));
+		ObjectId shredder = new ObjectId("50f7c4d74283292147f1b2a3");
+		List<ObjectId> notInSet = this.getFaneesForShredder(shredder);
+		Shredder sh = mongoTemplate.findById(shredder, Shredder.class,
+				"shredder");
+		notInSet.add(shredder);
 		
-		List <Battle> returned =  mongoTemplate.find(
-				new Query(crit),
-				Battle.class, "battle");
+		System.out.println("NOT IN SET: " );
+		for( ObjectId ids : notInSet) {
+			System.out.println(ids);
+		}
 		
-		for ( Battle r : returned ) {
-			System.out.println(r);
+		List <Shredder> fanees =  mongoTemplate.find(
+				new Query(Criteria.where("_id").nin(notInSet)), Shredder.class,
+				"shredder");
+		System.out.println("These are not:");
+		for ( Shredder s : fanees) {
+			System.out.println(s.getId());
+		}
+		
+
+		List<String> guitars = sh.getGuitars();
+		List<String> equiptment = sh.getEquiptment();
+		String country = sh.getCountry();
+
+		Query query = new Query();
+		Criteria ors = new Criteria().orOperator(
+				Criteria.where("guitars")
+				.in(guitars), Criteria.where("equiptment").in(equiptment),
+				Criteria.where("country").in(country));
+		
+		query.addCriteria(new Criteria().andOperator(ors, Criteria.where("_id").nin(notInSet)));
+		//query.limit(numberOfResults);
+
+		List<Shredder> res = mongoTemplate.find(query, Shredder.class,
+				"shredder");
+		int resSize = res.size();
+		System.out.println("FINAL RES: " + resSize);
+	//	logger.info("Might dig shredders: " + resSize);
+		for ( Shredder sr : res) {
+			System.out.println(sr.toString());
 		}
 	}
 	

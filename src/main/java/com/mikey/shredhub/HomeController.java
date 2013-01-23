@@ -245,7 +245,7 @@ public class HomeController {
 	Shredder login(@RequestBody LoginForm loginForm) {
 		logger.info("Login requested!");
 
-		return shredRepository.getShredderByNameAndPassword(
+		return shredRepository.loginShredder(
 				loginForm.getUsername(), loginForm.getPassword());
 	}
 	

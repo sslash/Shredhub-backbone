@@ -12,9 +12,11 @@ define([
         'views/home/shredView',
 		'text!templates/home/main.html',
         'text!templates/home/mainNavigation.html',
+        'session'
 		], function($, _, Backbone, Video,
 		BootstrapModal, BootstrapCarusel,ShredCollection, 
-		ShredView, shredListTemplate, navigationTemplate) {
+		ShredView, shredListTemplate, navigationTemplate,
+		Session) {
 
 		var MainHomeView = Backbone.View.extend({
 		el : $("#page"),   
@@ -69,6 +71,8 @@ define([
 					var data = {				
 						shreds : that.collection.models 
 					}; 
+					// Put these on session! :)
+					Session.setTopShreds(JSON.stringify(that.collection.models));					
 
 					var compiledTemplate = _.template(shredListTemplate, data);
 					that.$el.html(compiledTemplate);					

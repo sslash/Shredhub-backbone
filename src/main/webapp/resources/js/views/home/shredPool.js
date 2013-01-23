@@ -3,6 +3,8 @@ define([
   'underscore',
   'backbone',
   'bootstrapModal',
+  'session',
+  'collections/shredCollection',
   
   // Views
   'views/home/shredsView', 
@@ -12,10 +14,13 @@ define([
   // Templates
   'text!templates/home/shredPool.html',
   'text!templates/home/newShredsFromFanees.html',
-  'text!templates/home/topShreds.html'
-], function($, _, Backbone, BootstrapModal, ShredsView,
+  'text!templates/home/topShreds.html',
+  'text!templates/home/mightKnowShreds.html',
+  'text!templates/home/shredsByTags.html'
+], function($, _, Backbone, BootstrapModal,Session, 
+		ShredCollection, ShredsView,
 		AddShredView, ShredNewsView, shredPoolTemplate, faneesShredsTemplate,
-		topShredsTemplate){
+		topShredsTemplate, mightKnowShredsTemplate, shredsByTagsTemplate){
 	
 	var ShredPoolView = Backbone.View.extend({
     
@@ -28,31 +33,26 @@ define([
     	var compiledTemplate = _.template(shredPoolTemplate, {});
 		this.$el.html(compiledTemplate);
 		
-		var shredsFromFaneesView = new ShredsView({el:"#newShredsFromFanees"}); 
+		var shredsFromFaneesView = new ShredsView({el:"#newShredsFromFanees", fetched : false}); 
 		shredsFromFaneesView.setAttrs('NewShredsFromFanees', faneesShredsTemplate); 
 		shredsFromFaneesView.render();
 		
 		var shredNewsView = new ShredNewsView({el: "#shredNews"});
 		shredNewsView.render();
 		
-		var topShredsView = new ShredsView({el:"#topShreds"});
+		var topShredsView = new ShredsView({collection: new ShredCollection(Session.getTopShreds()), 
+			fetched : true,el:"#topShreds",collSetSize : 2, startCollIndex : 10 });
+		
 		topShredsView.setAttrs('TopShreds', topShredsTemplate);  
 		topShredsView.render();
 		 
-		
-		// Set shreds from shredders you might know
-		(require(['text!templates/home/mightKnowShreds.html'], function(shredsTemplate){
-			var topShredsView = new ShredsView({el:"#mightKnowShreds"}); 
-			topShredsView.setAttrs('ShredsYouMightKnow', shredsTemplate); 
-			topShredsView.render();
-		}))(); 
-		
-		// Set shreds by tags
-		(require(['text!templates/home/shredsByTags.html'], function(shredsTemplate){
-			var topShredsView = new ShredsView({el:"#shredsByTags"}); 
-			topShredsView.setAttrs('ShredsByTags', shredsTemplate); 
-			topShredsView.render();
-		}))();
+		var mightKnowView = new ShredsView({el:"#mightKnowShreds", fetched : false, collSetSize : 3, startCollIndex : 7}); 
+		mightKnowView.setAttrs('ShredsYouMightKnow', mightKnowShredsTemplate); 
+		mightKnowView.render(); 
+		 
+		var byTagsView = new ShredsView({el:"#shredsByTags",fetched : false}); 
+		byTagsView.setAttrs('ShredsByTags', shredsByTagsTemplate); 
+		byTagsView.render();
     },
     
     events : {

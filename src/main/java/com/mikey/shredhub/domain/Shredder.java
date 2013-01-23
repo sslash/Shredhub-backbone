@@ -13,7 +13,7 @@ import com.mongodb.DBObject;
 
 
 @Document
-public class Shredder {
+public class Shredder{
 	
 	@Id
     private String id;

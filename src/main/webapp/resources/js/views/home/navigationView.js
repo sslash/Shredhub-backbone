@@ -61,10 +61,7 @@ define([ 'jquery', 'underscore', 'backbone', 'bootstrapModal',
 			navData.shredderId = window.Session.getUser().id;
 			var that = this;
 			this.collection.fetch({
-				success : function(res) {
-					console.log("succes!"
-							+ JSON.stringify(that.collection));
-					 
+				success : function(res) { 
 					navData.battleRequests = that.collection.models; 
 					console.log("LOL: " + that.cid);
 					var navTmplCompiled = _.template(NavigationTemplate, navData);

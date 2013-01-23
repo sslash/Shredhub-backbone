@@ -8,23 +8,22 @@ define([ 'jquery',
 		'views/battle/battlesView',
 		'models/battle', 
 		'views/battle/battleView',
-		'models/shredder',
-		'views/profile/shredderView',
-		'views/home/shredPool',
-		'views/shredders/shreddersView' */
+		 */
          'collections/battleRequestCollection',
          'views/home/mainView'], function($, _, NavigationView,
 		Session/*, BattleRequestsCollection, MainView, TwitterWidget,
 		BattlesView, Battle, BattleView, Shredder, ShredderView, ShredPoolView,
-		ShreddersView*/,BattleRequestsCollection, MainView) {
+		*/,BattleRequestsCollection, MainView) {
 
 	var Command = function() {
 	};
 
 	Command.shredders = function() {
 
-		var shreddersView = new ShreddersView();
-		shreddersView.render();
+		require(['views/shredders/shreddersView'], function(ShreddersView){
+			var shreddersView = new ShreddersView();
+			shreddersView.render();
+		});
 	};
 
 	Command.home = function() {
@@ -78,12 +77,16 @@ define([ 'jquery',
 		
 		})();
 	};
-	/*
 
-	Command.showShredder = function(shredderId) {
-		var shredder = new Shredder({
-			id : shredderId
-		});
+
+	Command.showShredder = function(shredderId) {		
+	
+		require(['models/shredder','views/profile/shredderView'], 
+				function(Shredder, ShredderView){		
+		
+			var shredder = new Shredder({
+				id : shredderId
+			});
 
 		shredder.fetch({
 			success : function(res) {
@@ -93,9 +96,22 @@ define([ 'jquery',
 				shredderView.render();
 			}
 		});
+	});
+	};
+	
+	Command.profile = function() {
+		require(['models/shredder','views/profile/shredderView'], 
+				function(Shredder, ShredderView){		
+		
+				var shredderView = new ShredderView({
+					model : new Shredder( Session.getUser() ),
+					fanees : Session.getUser().fanees
+				});
+				shredderView.render();
+		});
 	};
 
-	
+	/*
 
 	Command.battles = function() {
 		var battlesView = new BattlesView();
@@ -125,8 +141,6 @@ define([ 'jquery',
 	};
 
 	Command.execute = function(action) {
-		console.log("Execute: " + action + ", Session : " + Session.getUser());
-
 		window.Session = Session;
 		// Renders the navigationview each time. Might be performance lame
 		if (!window.navigationView) {

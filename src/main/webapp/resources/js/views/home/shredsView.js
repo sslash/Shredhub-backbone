@@ -5,19 +5,22 @@ define([ 'jquery', 'underscore', 'backbone', 'bootstrapModal', 'video',
 
 	var ShredsView = Backbone.View.extend({
 
-		page : 1,
-		
-		currVidSetIndex : 5,
-	
-		vidSetSize : 4,
-		
+		page : 1,		
 		advancePage : 1,
 		
 
 		initialize : function() {
 			_.bindAll(this);
-			this.collection = new shredCollection();
-			console.log("init shreds view" + this.cid);
+			
+			if ( !this.options.fetched ) {
+				this.collection = new shredCollection();
+			}
+			
+			if ( !this.options.collSetSize) {
+				this.options.collSetSize = 4;
+				this.options.startCollIndex = 5;
+			}
+			this.options.currCollIndex = this.options.startCollIndex;			
 		},
 
 		// Receives a template, so this class can be reused with different views (templates)
@@ -34,9 +37,9 @@ define([ 'jquery', 'underscore', 'backbone', 'bootstrapModal', 'video',
 		nextShreds : function(event) {
 			event.preventDefault();
 		
-			if (this.currVidSetIndex == this.advancePage){
+			if (this.options.currCollIndex == this.advancePage){
 				this.collection.advancePage();
-				this.currVidSetIndex = 5;
+				this.options.currCollIndex = this.options.startCollIndex;
 				var that = this;
 				this.collection.fetch({
 					success : function(res) {
@@ -44,20 +47,29 @@ define([ 'jquery', 'underscore', 'backbone', 'bootstrapModal', 'video',
 					}
 				});
 			} else {
-				this.currVidSetIndex --;
+				this.options.currCollIndex --;
 				this.renderCollection();
 			}	
 		},
 		
 		renderCollection : function() {
+			console.log("Will render new coll. currIndex: " + this.options.currCollIndex + ", vidSetSize: " +  this.options.collSetSize);
+			
 			var template = _.template(this.shredsTemplate, {
-				shreds : _.last(this.collection.models, this.currVidSetIndex*this.vidSetSize)
+				shreds : _.last(this.collection.models, this.options.currCollIndex*this.options.collSetSize),
+				index : (this.options.startCollIndex - this.options.currCollIndex) * this.options.collSetSize
 			});
 			$(this.el).html(template);		
 		},
 
 		render : function() {
-			this.populateShreds();
+			if ( !this.options.fetched ) {
+				console.log("collection not fetched");
+				this.populateShreds();
+			}else{
+				console.log("collection already fetched");
+				this.renderCollection();
+			}
 			return this;
 		},
 
@@ -89,15 +101,14 @@ define([ 'jquery', 'underscore', 'backbone', 'bootstrapModal', 'video',
 				return memo + "&tag=" + arg;
 			}, "ShredsByTags");
 			
-			console.log("url: " + query);
 			this.collection.setQuery(query);
 			this.render();
 		},
 		
 		showVideoView : function(event) {
 			
-			// get the  shred
-			var id = event.currentTarget.id;
+			// get the shred id
+			var id = event.currentTarget.id.split("_")[1];			
 			var shred = this.collection.models[id];
 			 
 			var shredView = new ShredView({

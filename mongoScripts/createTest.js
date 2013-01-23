@@ -1,8 +1,8 @@
 // Create shreds
-db.shredders.remove({});
-db.shreds.remove({});
-db.battles.remove({});
-db.battleRequests.remove({});
+db.shredder.remove({});
+db.shred.remove({});
+db.battle.remove({});
+db.battleRequest.remove({});
 
 var countries = [ "Norway", "Sweden", "Denmark", "Australia", "USA", "England",
 		"Finland", "Germany", "Argentina", "Spain" ];
@@ -22,7 +22,7 @@ var img = [ "EddieVanHalen.jpg", "RobertoDeMicheli.jpg", "michael.jpg",
 		"MikeSpike.jpg", "YngwieMalmsteen.jpg", "Roberto.jpg" ];
 
 // create 1000 shredders
-for ( var i = 1; i <= 1000; i++) {
+for ( var i = 1; i <= 10; i++) {
 
 	var r = Math.floor(Math.random() * 10);
 	var r2 = Math.floor(Math.random() * 10);
@@ -37,7 +37,7 @@ for ( var i = 1; i <= 1000; i++) {
 		country : countries[r],
 		profileImagePath : img[r4],
 		email : "shredder" + i + "@slash.com",
-		password : "1234",
+		password : "1111",
 		guitars : [ g[r2] ],
 		equiptment : [ eq[r3] ],
 		description : "Simple test shredder #" + i,
@@ -47,23 +47,6 @@ for ( var i = 1; i <= 1000; i++) {
 
 	db.shredder.save(sh);
 }
-
-var sh = {
-	username : "Slash",
-	fanees : new Array(),
-	birthdate : new Date(),
-	country : "USA",
-	profileImagePath : "slash.jpg",
-	email : "shredder" + i + "@slash.com",
-	password : "1234",
-	guitars : [ "Gibson les paul" ],
-	equiptment : [ "Marshall" ],
-	description : "Shreds like a beast",
-	timeCreated : new Date(),
-	shredderLevel : 0,
-};
-
-db.shredder.save(sh);
 
 var shredders = db.shredder.find({});
 var count = db.shredder.count();
@@ -85,7 +68,7 @@ var tagsArr = [ "Lick", "Fast", "Technique", "Sweeping", "Tapping", "Cover",
 		"Jazz", "Fusion", "Rock", "Metal", "Pop", "Rap", "Funk", "Acoustic",
 		"Chops", "Jam", "Improvisation" ];
 // Create 100 000 shreds 
-for ( var i = 1; i <= 10000; i++) {
+for ( var i = 1; i <= 1000; i++) {
 
 	var ran = Math.floor(Math.random() * count);
 	var ranS = Math.floor(Math.random() * count);
@@ -109,14 +92,16 @@ for ( var i = 1; i <= 10000; i++) {
 		{
 			timeCreated : new Date(),
 			text : "Lorem ipsum lol cat mode" + i,
-			commenterId : shredders[ranS.id],
-			commenterName : shredders[ranS.username]
-		}, {
+			commenterId : shredders[ranS]._id,
+			commenterName : shredders[ranS].username
+		},
+		{
 			timeCreated : new Date(),
-			text : "Saps ipsumalis lol cat mode" + i+1,
-			commenterId : shredders[ranS.id],
-			commenterName : shredders[ranS.username]		
-		} ],
+			text : "Saps ipsumalis lol cat mode" + (i+1),
+			commenterId : shredders[ranS]._id,
+			commenterName : shredders[ranS].username		
+		} 
+		],
 		shredRating : {
 			numberOfRaters : ranrate,
 			currentRating : ranrate2
@@ -127,30 +112,12 @@ for ( var i = 1; i <= 10000; i++) {
 	});
 }
 
-db.shred.save({
-	description : "Super duper shred",
-	owner : {
-		$ref : "shredder",
-		$id : shredders[0]._id
-	},
-	timeCreated : new Date(),
-	shredType : "normal",
-	shredComments : new Array(),
-	shredRating : {
-		numberOfRaters : 0,
-		currentRating : 0
-	},
-	videoPath : shr[1],
-	videoThumbnail : img,
-	tags : [ tagsArr[0], tagsArr[1] ]
-});
-
 // Get shredders
 var shredders = db.shredder.find({});
 var size = db.shredder.count();
 
 // Create battles
-for ( var i = 1; i <= 10000; i++) {
+for ( var i = 1; i <= 1000; i++) {
 	var ran1 = Math.floor(Math.random() * size);
 	var ran2 = Math.floor(Math.random() * size);
 	var ran3 = Math.floor(Math.random() * 41);
@@ -188,11 +155,12 @@ for ( var i = 1; i <= 10000; i++) {
 }
 
 //Create battle requests
-for ( var i = 1; i <= 100; i++) {
+for ( var i = 1; i <= 1000; i++) {
 	var ran1 = Math.floor(Math.random() * size);
 	var ran2 = Math.floor(Math.random() * size);
 	var ran3 = Math.floor(Math.random() * 41);
 
+	if ( ran1 != ran2) {
 	db.battleRequest.save({
 		battler : {
 			$ref : "shredder",
@@ -207,6 +175,7 @@ for ( var i = 1; i <= 100; i++) {
 		videoPath : "battle-23-8-5.mp4",
 		videoThumbnail : "battle_50a508930364e84086ef7b7c_battle2.jpg",
 	});
+	}
 }
 
 

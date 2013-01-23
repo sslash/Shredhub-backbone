@@ -3,9 +3,9 @@ package com.mikey.shredhub.repository;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.TreeSet;
 
 import org.bson.types.ObjectId;
-import org.junit.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -36,7 +36,7 @@ public class ShredRepository {
 	private static final int NO_SHREDS_IN_RESULT_SET = 20;
 	private static final int NO_SHREDDERS_IN_RESULT_SET = 20;
 	private static final int NO_BATTLES_IN_RESULT = 20;
-	private static final int SHREDS_IN_TOP_SHREDS = 9;
+	private static final int SHREDS_IN_TOP_SHREDS = 20;
 
 	public List<Shred> getAllShreds() {
 		return (List<Shred>) mongoTemplate.getCollection("shred");
@@ -77,7 +77,7 @@ public class ShredRepository {
 	 * @param password
 	 * @return
 	 */
-	public Shredder getShredderByNameAndPassword(String username,
+	public Shredder loginShredder(String username,
 			String password) {
 		Shredder s = mongoTemplate.findOne(
 				new Query(Criteria.where("username").is(username)
@@ -308,8 +308,9 @@ public class ShredRepository {
 
 	public List<Shred> getShredsYouMightKnow(int page, String id) {
 		List<ObjectId> fanees = getFaneesForShredder(new ObjectId(id));
-		List<ObjectId> faneesOfFanees = new ArrayList<ObjectId>();
+		TreeSet<ObjectId> faneesOfFanees = new TreeSet<ObjectId>();
 
+		// Find unique fanees of fanees
 		for (ObjectId fanee : fanees) {
 			List<String> tempStringRes = new ArrayList<String>();
 			tempStringRes.addAll( // Could call the function used above, but
@@ -322,16 +323,28 @@ public class ShredRepository {
 			// SUX!
 			for (String s : tempStringRes) {
 				faneesOfFanees.add(new ObjectId(s));
-			}
+			}			
+		}
+		
+		// Remove self, if he exists..
+		faneesOfFanees.remove(new ObjectId(id));
+
+		Query q = Query.query(new Criteria().andOperator(
+				new Criteria().where("owner.$id").in(
+				faneesOfFanees),
+				new Criteria().where("owner.$id").nin(fanees))
+				);
+		q.limit(21);
+		q.sort().on("timeCreated", Order.DESCENDING);
+		q.skip((page - 1) * 21); // Specialized function
+		
+		logger.info("SHREDS MIGHT KNOW: ");
+		List <Shred> res = mongoTemplate.find(q, Shred.class, "shred"); 
+		for (Shred s : res ) {
+			logger.info(s.toString());
 		}
 
-		Query q = Query.query(new Criteria().where("owner.$id").in(
-				faneesOfFanees));
-		q.limit(NO_SHREDS_IN_RESULT_SET);
-		q.sort().on("timeCreated", Order.DESCENDING);
-		q.skip((page - 1) * NO_SHREDS_IN_RESULT_SET);
-
-		return mongoTemplate.find(q, Shred.class, "shred");
+		return res;
 	}
 
 	public List<Battle> getBattlesFromFanees(int page, String shredderId) {
@@ -369,36 +382,32 @@ public class ShredRepository {
 
 	public List<Shredder> getShreddersYouMightLike(String shredderId,
 			int numberOfResults) {
+
 		ObjectId shredder = new ObjectId(shredderId);
-		List<ObjectId> fanees = this.getFaneesForShredder(shredder);
+		List<ObjectId> notInSet = this.getFaneesForShredder(shredder);
 		Shredder sh = mongoTemplate.findById(shredder, Shredder.class,
 				"shredder");
+		notInSet.add(shredder);		
 
 		List<String> guitars = sh.getGuitars();
 		List<String> equiptment = sh.getEquiptment();
 		String country = sh.getCountry();
 
 		Query query = new Query();
-		query.addCriteria(new Criteria().andOperator(Criteria.where("guitars")
+		Criteria ors = new Criteria().orOperator(
+				Criteria.where("guitars")
 				.in(guitars), Criteria.where("equiptment").in(equiptment),
-				Criteria.where("country").in(country), new Criteria()
-						.nin(fanees)));
+				Criteria.where("country").in(country));
+		
+		query.addCriteria(new Criteria().andOperator(ors, Criteria.where("_id").nin(notInSet)));
 		query.limit(numberOfResults);
 
 		List<Shredder> res = mongoTemplate.find(query, Shredder.class,
 				"shredder");
 		int resSize = res.size();
-		logger.debug("Might dig shredders: " + resSize);
-
-		if (resSize < numberOfResults) {
-			query = new Query();
-			query.addCriteria(new Criteria().andOperator(new Criteria()
-					.orOperator(Criteria.where("guitars").in(guitars), Criteria
-							.where("equiptment").in(equiptment), Criteria
-							.where("country").in(country)), new Criteria()
-					.nin(fanees)));
-			query.limit(numberOfResults - resSize);
-			res.addAll(mongoTemplate.find(query, Shredder.class, "shredder"));
+		logger.info("Might dig shredders: " + resSize);
+		for ( Shredder sr : res) {
+			logger.info(sr.toString());
 		}
 
 		return res;

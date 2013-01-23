@@ -2,8 +2,6 @@
 define([
 ], function(){
 	
-	
-	// TODO: Create a singleton implementation of session
 	var Session =  function() {		
 	};
 		
@@ -14,6 +12,14 @@ define([
 			} else {
 				return null;
 			}
+		};
+		
+		Session.getTopShreds = function() {
+			return JSON.parse(sessionStorage.getItem("topShreds"));
+		};
+		
+		Session.setTopShreds = function(topShreds) {
+			sessionStorage.setItem("topShreds", topShreds);
 		};
 		
 		Session.setUser = function(user) {

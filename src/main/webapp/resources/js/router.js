@@ -5,6 +5,7 @@ define([ 'jquery', 'underscore', 'backbone', /*'vm',*/ 'command' ], function($, 
 	var AppRouter = Backbone.Router.extend({
 		routes : {
 			'login' : 'login',
+			'profile' : 'profile',
 			'shredPool' : 'shredPool',
 			'shredder/:shredderId' : 'showShredderView',
 			'shredders' : 'showShreddersView',
@@ -22,6 +23,10 @@ define([ 'jquery', 'underscore', 'backbone', /*'vm',*/ 'command' ], function($, 
 		
 		window.app_router.on('route:defaultAction', function(actions) {
 			Command.execute("home");
+		});
+		
+		window.app_router.on('route:profile', function() {
+			Command.execute("profile");
 		});
 		
 		window.app_router.on("route:showBattlesView", function() {

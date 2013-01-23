@@ -19,7 +19,7 @@
 			<div class="span10">
 				<a href="#shredder/<%= s.get('id') %>"><%= s.get('username') %></a>
 				<p class="lead"><%= s.get('description') %></p>
-				<p class="lead">Level: <%= s.get('level') %></p>
+				<p class="lead">Level: <%= s.get('shredderLevel') == 0 ? 0 : Math.floor(s.get('shredderLevel')/10)  %></p>
 
 				<!-- /span10 -->
 			</div>
